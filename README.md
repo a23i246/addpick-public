@@ -25,25 +25,36 @@
 git clone https://github.com/a23i246/addpick-public.git
 cd addpick-public
 
-# 環境変数
-cp .env.example .env
-# .env の DB を一本化
+# 1) 環境変数
+Copy-Item .env.example .env
+# .env を開いて次を確認/編集:
+# NODE_ENV=development
 # DB_PATH=./database.sqlite
-# DEMO_MODE=true
+# DEMO_MODE=false   # デモ裏口は既定OFFでOK（シードで全員ログイン可）
 # SESSION_SECRET=change_me
 # CSRF_SECRET=change_me
+# UPLOAD_DIR=uploads
 
-npm ci
+# 2) 依存インストール
+npm ci   # 失敗時は npm install
 
-# 404/500 テンプレが無いと一部ルートで落ちるため、views/ に置く(いずれ準備予定)
-# views/404.ejs, views/500.ejs を準備（簡易テンプレでOK）
+# 3) 404/500 テンプレ（未作成なら最小版を作成）
+'<!doctype html><meta charset="utf-8"><h1>404</h1><p><%= message || "Not Found" %></p>' `
+  | Out-File -Encoding UTF8 -FilePath .\views\404.ejs
+'<!doctype html><meta charset="utf-8"><h1>エラー</h1><pre><%= (error && error.message) || "" %></pre>' `
+  | Out-File -Encoding UTF8 -FilePath .\views\500.ejs
 
-# 画像以外の全列を埋めるデモデータ投入
+# 4) スキーマ作成のため一度だけ起動（カテゴリと管理者が自動生成される）
+# ログに [DB] using ./database.sqlite や「カテゴリ初期投入」「管理者作成」が出ればOK
+# (重要)そのまま Ctrl + C で停止
+npm start
+
+# 5) デモデータ投入（画像以外の全列を充填）
 npm run db:seed-full
 
-# 起動
+# 6) 本起動
 npm start
-# http://localhost:3000
+# → http://localhost:3000
 
 デモ用アカウント　パスワードはすべてpass1234
 Admin: admin@addpick.local #管理者
