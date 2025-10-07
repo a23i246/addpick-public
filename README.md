@@ -1,7 +1,7 @@
 # AddPick (Public Mirror)
 
 > 📘 **詳細ドキュメント**：HTML 版 README  
-> 👉 `README.html`（または `docs/README.html` に配置してください）
+> 👉 `README.html`　詳しい解説はこちらで行っております
 
 インフルエンサーと企業の広告依頼をつなぐ Web アプリ（学習・ポートフォリオ向け公開版）。
 
@@ -60,4 +60,5 @@ npm start
 Admin: admin@addpick.local #管理者
 Company: company@example.com #企業
 Influencer: influencer@example.com #ユーザー
+
 Buyer: buyer@example.com #ロールが不明なため入れません
