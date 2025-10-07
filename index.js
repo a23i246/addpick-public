@@ -270,9 +270,8 @@ app.use('/', require('./routes/profile'));//プロフィール関連ページ
 app.use('/', require('./routes/company'));//企業の購入後の処理等
 app.use('/', require('./routes/influencer'));
 //app.use('/', require('./routes/cart'));//カート機能（未完成）
-const adminNotifications = require('./routes/admin_notifications');//管理者ページ
-app.use(adminNotifications);
-const bankRouter = require('./routes/bank');//口座処理
+const adminNotifications = require('./routes/admin_notifications');
+app.use('/admin', ensureLoggedIn, ensureAdmin, adminNotifications);const bankRouter = require('./routes/bank');//口座処理
 app.use('/billing', bankRouter);  // /billing/bank, /billing/bank/verify
 app.use('/', bankRouter);         // /debits, /admin/debits なども拾うなら
 
