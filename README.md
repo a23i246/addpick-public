@@ -4,6 +4,7 @@
 > 👉 `README.html`　詳しい解説はこちらで行っております
 
 インフルエンサーと企業の広告依頼をつなぐ Web アプリ（学習・ポートフォリオ向け公開版）。
+企業閲覧用のパブリック版なのでいくつかの機能は停止もしくは未完成のまま掲載しています。
 
 ## 機能
 - 企業: 広告依頼の投稿 / 応募管理 / 購入者一覧（対応済みフラグ）
@@ -62,3 +63,4 @@ Company: company@example.com #企業
 Influencer: influencer@example.com #ユーザー
 
 Buyer: buyer@example.com #ロールが不明なため入れません
+
