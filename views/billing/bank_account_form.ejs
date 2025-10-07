@@ -1,0 +1,60 @@
+<% if (user && user.role === 'company') { %>
+  <%- include('../partials/header_company', { pageTitle: pageTitle, user, csrfToken, bankVerified, withdrawableJPYFmt }) %>
+<% } else { %>
+  <%- include('../partials/header', { pageTitle: pageTitle, user, csrfToken, bankVerified, withdrawableJPYFmt }) %>
+<% } %>
+  <h1 class="h4 mb-3">口座振替の設定</h1>
+
+  <form method="POST" action="/billing/bank" class="card p-3">
+    <% if (typeof csrfToken !== 'undefined' && csrfToken) { %>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <% } %>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">銀行コード（4桁）</label>
+        <input class="form-control" name="bank_code" value="<%= account?.bank_code || '' %>" required
+          pattern="[0-9]{4}" inputmode="numeric" maxlength="4" title="4桁の半角数字を入力してください">      </div>
+      <div class="col-md-4">
+        <label class="form-label">支店コード（3桁）</label>
+        <input class="form-control" name="branch_code" value="<%= account?.branch_code || '' %>" required
+        pattern="[0-9]{3}" inputmode="numeric" maxlength="3" title="3桁の半角数字を入力してください">      </div>
+      <div class="col-md-4">
+        <label class="form-label">口座種別</label>
+        <select class="form-select" name="account_type" required>
+          <option value="futsu"  <%= account?.account_type==='futsu'?'selected':'' %>>普通</option>
+          <option value="toza"   <%= account?.account_type==='toza'?'selected':'' %>>当座</option>
+          <option value="chokin" <%= account?.account_type==='chokin'?'selected':'' %>>貯金</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">口座番号</label>
+        <input class="form-control" name="account_number" required>
+        <% if (maskedAccount) { %>
+          <div class="form-text">登録済み: <%= maskedAccount %></div>
+        <% } %>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">口座名義（カナ）</label>
+        <input class="form-control" name="holder_kana" value="<%= account?.holder_kana || '' %>" required>
+      </div>
+
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="mandate" name="accept_mandate" value="1" required>
+          <label class="form-check-label" for="mandate">
+            口座振替依頼に同意します（モック）
+          </label>
+        </div>
+        <div class="form-text">※ 実運用では電子同意の文言・IP・タイムスタンプを保存</div>
+      </div>
+    </div>
+
+    <div class="mt-3 d-flex gap-2">
+      <button class="btn btn-primary" type="submit">保存</button>
+      <a class="btn btn-outline-secondary" href="/billing/bank/verify">仮認証へ</a>
+    </div>
+  </form>
+</div>
+<%- include('../partials/footer') %>

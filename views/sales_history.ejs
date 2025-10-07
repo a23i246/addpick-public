@@ -1,0 +1,236 @@
+<%- include('partials/header', { title: '売上履歴', user: user }) %>
+
+<div class="container py-4">
+  <h2 class="mb-3">売上履歴（インフルエンサー）</h2>
+
+  <!-- 期間の合計 -->
+  <div class="card mb-4 p-3">
+    <div class="d-flex flex-wrap align-items-baseline gap-3">
+      <div><strong>期間:</strong>
+        <%= (totals && totals.first_day) ? totals.first_day : '-' %>
+        〜
+        <%= (totals && totals.last_day) ? totals.last_day : '-' %>
+      </div>
+      <div><strong>合計個数:</strong> <%= totals ? totals.total_quantity : 0 %></div>
+      <div><strong>報酬合計:</strong> ¥<%= totals ? totals.total_reward : 0 %></div>
+    </div>
+  </div>
+
+  <!-- 日別グラフ（棒） -->
+  <div class="card mb-4 p-3">
+    <h5 class="mb-3">日別インフルエンサー報酬（棒グラフ）</h5>
+    <canvas id="dailyChart" width="900" height="300"></canvas>
+    <div class="text-muted small mt-2">※ 単位：円（インフルエンサー取り分）</div>
+  </div>
+
+  <!-- 合計（累積）グラフ（折れ線） -->
+  <div class="card mb-4 p-3">
+    <h5 class="mb-3">累積インフルエンサー報酬（折れ線グラフ）</h5>
+    <canvas id="cumulativeChart" width="900" height="300"></canvas>
+    <div class="text-muted small mt-2">※ 初日からの累積合計（円）</div>
+  </div>
+
+  <!-- 既存：商品別集計テーブル -->
+  <div class="card p-3">
+    <h5 class="mb-3">商品別集計</h5>
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead>
+          <tr>
+            <th>商品名</th>
+            <th class="text-end">購入件数</th>
+            <th class="text-end">売れた合計数</th>
+            <th class="text-end">インフルエンサー取り分合計</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (Array.isArray(sales) && sales.length) { %>
+            <% sales.forEach(function(s){ %>
+              <tr>
+                <td><%= s.product_name %></td>
+                <td class="text-end"><%= s.total_orders %></td>
+                <td class="text-end"><%= s.total_quantity %></td>
+                <td class="text-end">¥<%= s.total_reward %></td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr><td colspan="4" class="text-center text-muted">データがありません</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<style nonce="<%= (typeof cspNonce!=='undefined'&&cspNonce)?cspNonce:'' %>">
+  .card { border: 1px solid #e9ecef; border-radius: 0.75rem; }
+</style>
+
+<!-- ★ EJSのデータはJSに直接埋めず、JSONタグ経由で渡す（リンターの"expression expected"回避） -->
+<script type="application/json" id="dailyData" nonce="<%= (typeof cspNonce!=='undefined'&&cspNonce)?cspNonce:'' %>"><%- JSON.stringify(daily || []) %></script>
+
+<script nonce="<%= (typeof cspNonce!=='undefined'&&cspNonce)?cspNonce:'' %>">
+(function(){
+  function $(id){ return document.getElementById(id); }
+
+  // JSONタグから安全に受け取り
+  var jsonEl = $('dailyData');
+  var daily = [];
+  if (jsonEl) {
+    try { daily = JSON.parse(jsonEl.textContent || '[]'); } catch (e) { daily = []; }
+  }
+  var labels = daily.map(function(d){ return d.day; });
+  var dayValues = daily.map(function(d){ return Number(d.daily_reward || 0); });
+
+  // 累積配列を作成
+  var cumValues = [];
+  var acc = 0;
+  for (var i=0; i<dayValues.length; i++) {
+    acc += dayValues[i];
+    cumValues.push(acc);
+  }
+
+  // 共通：簡易軸・目盛・ラベル描画
+  function drawAxes(ctx, W, H, padL, padR, padT, padB){
+    var chartW = W - padL - padR, chartH = H - padT - padB;
+    ctx.clearRect(0,0,W,H);
+    ctx.font = '12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+    ctx.fillStyle = '#333';
+    ctx.strokeStyle = '#999';
+    // y軸
+    ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT+chartH); ctx.stroke();
+    // x軸
+    ctx.beginPath(); ctx.moveTo(padL, padT+chartH); ctx.lineTo(padL+chartW, padT+chartH); ctx.stroke();
+  }
+  function drawGridAndTicks(ctx, W, H, padL, padR, padT, padB, maxV){
+    var chartW = W - padL - padR, chartH = H - padT - padB;
+    var steps = 5;
+    for (var i=0;i<=steps;i++){
+      var yVal = (maxV/steps)*i;
+      var y = padT + chartH - (yVal/maxV)*chartH;
+      ctx.strokeStyle='#eee';
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL+chartW, y); ctx.stroke();
+      ctx.fillStyle='#666'; ctx.textAlign='left';
+      ctx.fillText('¥' + Math.round(yVal), 6, y+4);
+    }
+  }
+  function drawXLabels(ctx, W, H, padL, padR, padT, padB, labels, stepX, barW){
+    var chartW = W - padL - padR, chartH = H - padT - padB;
+    var x = padL + Math.max(2, Math.floor(barW*0.5)) + barW/2;
+    var skip = Math.max(1, Math.ceil(labels.length/12));
+    ctx.fillStyle='#444';
+    ctx.textAlign = 'center';
+    for (var k=0;k<labels.length;k++){
+      if (k % skip === 0) {
+        ctx.save();
+        ctx.translate(x, padT+chartH+18);
+        ctx.rotate(-0.6);
+        ctx.fillText(labels[k], 0, 0);
+        ctx.restore();
+      }
+      x += stepX;
+    }
+  }
+
+  // 1) 日別：棒グラフ
+  (function(){
+    var el = $('dailyChart');
+    if (!el) return;
+    var ctx = el.getContext('2d');
+    var W = el.width, H = el.height;
+    var padL=60, padR=20, padT=20, padB=50;
+    var chartW = W - padL - padR, chartH = H - padT - padB;
+
+    drawAxes(ctx, W, H, padL, padR, padT, padB);
+
+    if (!dayValues.length) {
+      ctx.fillStyle = '#666'; ctx.textAlign = 'center';
+      ctx.fillText('データがありません', W/2, H/2);
+      return;
+    }
+
+    var maxV = Math.max.apply(null, dayValues.concat([0]));
+    if (maxV === 0) maxV = 1;
+
+    var barW = Math.max(4, Math.floor(chartW / Math.max(dayValues.length*1.6, 1)));
+    var gap  = Math.max(2, Math.floor(barW*0.5));
+    var stepX= barW + gap;
+
+    drawGridAndTicks(ctx, W, H, padL, padR, padT, padB, maxV);
+
+    // 棒
+    var x = padL + gap;
+    ctx.fillStyle = '#6aa6ff';
+    for (var j=0;j<dayValues.length;j++){
+      var v = dayValues[j];
+      var h = (v/maxV)*chartH;
+      ctx.fillRect(x, padT+chartH - h, barW, h);
+      x += stepX;
+    }
+
+    drawXLabels(ctx, W, H, padL, padR, padT, padB, labels, stepX, barW);
+  })();
+
+  // 2) 累積：折れ線グラフ
+  (function(){
+    var el = $('cumulativeChart');
+    if (!el) return;
+    var ctx = el.getContext('2d');
+    var W = el.width, H = el.height;
+    var padL=60, padR=20, padT=20, padB=50;
+    var chartW = W - padL - padR, chartH = H - padT - padB;
+
+    drawAxes(ctx, W, H, padL, padR, padT, padB);
+
+    if (!cumValues.length) {
+      ctx.fillStyle = '#666'; ctx.textAlign = 'center';
+      ctx.fillText('データがありません', W/2, H/2);
+      return;
+    }
+
+    var maxV = Math.max.apply(null, cumValues.concat([0]));
+    if (maxV === 0) maxV = 1;
+
+    drawGridAndTicks(ctx, W, H, padL, padR, padT, padB, maxV);
+
+    // 折れ線
+    var n = cumValues.length;
+    var stepX = (chartW) / Math.max(n-1, 1);
+    ctx.strokeStyle = '#ff7a7a';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (var i=0;i<n;i++){
+      var x = padL + stepX*i;
+      var y = padT + chartH - (cumValues[i]/maxV)*chartH;
+      if (i === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // 点マーカー（軽めに）
+    ctx.fillStyle = '#ff7a7a';
+    for (var k=0;k<n;k++){
+      var xk = padL + stepX*k;
+      var yk = padT + chartH - (cumValues[k]/maxV)*chartH;
+      ctx.beginPath(); ctx.arc(xk, yk, 2.5, 0, Math.PI*2); ctx.fill();
+    }
+
+    // Xラベル（間引き＆斜め）
+    var skip = Math.max(1, Math.ceil(labels.length/12));
+    ctx.fillStyle='#444';
+    ctx.textAlign = 'center';
+    for (var t=0;t<labels.length;t++){
+      if (t % skip === 0) {
+        var xt = padL + stepX*t;
+        ctx.save();
+        ctx.translate(xt, padT+chartH+18);
+        ctx.rotate(-0.6);
+        ctx.fillText(labels[t], 0, 0);
+        ctx.restore();
+      }
+    }
+  })();
+
+})();
+</script>
+
+<%- include('partials/footer') %>

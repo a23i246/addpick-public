@@ -1,0 +1,50 @@
+<%- include('partials/header', { pageTitle: '購入ページ', user: user }) %>
+
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div class="alert alert-danger">
+        <ul>
+          <% errors.forEach(function(err) { %>
+            <li><%= err.msg %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+
+    <h3 class="mb-3">紹介者: <%= ad.referrer_name %></h3>
+
+    <h4 class="text-primary"><%= ad.title %></h4>
+    <p class="mb-2"><strong>商品名:</strong> <%= ad.product_name %></p>
+    <p class="mb-2"><strong>価格:</strong> ¥<%= ad.unit_price %></p>
+    <p><strong>残り在庫：</strong> <%= ad.stock %> 個</p>
+
+    <% if (ad.stock <= 0) { %>
+      <p class="text-danger">※ 売り切れのため購入できません</p>
+      <button class="btn btn-secondary" disabled>売り切れ</button>
+    <% } else { %>
+      <!-- ✅ 数量付き即購入フォーム -->
+      <form action="/purchase/ad/<%= ad.id %>/by/<%= influencerId %>" method="POST" class="d-flex gap-2 align-items-center mb-3">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="idempotency_key" value="<%= idemToken %>">
+        <input type="number" name="quantity" min="1" max="<%= ad.stock %>" value="1" class="form-control w-100" required>
+        <button type="submit" class="btn btn-primary">購入する</button>
+      </form>
+    <% } %>
+
+    <!-- カート追加フォーム（既存のままでOK） -->
+    <!--カート機能一時中断
+    <form action="/cart/add/<%= ad.id %>" method="POST" class="d-flex align-items-center gap-2">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="number" name="quantity" min="1" max="<%= ad.stock %>" value="1" class="form-control w-100" required>
+      <button type="submit" class="btn btn-outline-primary">カートに追加</button>
+    </form>　　--> 
+
+    <div class="mt-3">
+      <a href="/" class="btn btn-outline-secondary">ホームへ戻る</a>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,122 @@
+<%- include('partials/header', { title: '応募一覧', user: user }) %>
+
+<div class="container py-4">
+  <h1 class="mb-4">応募一覧</h1>
+
+  <% const list = Array.isArray(apps) ? apps : (Array.isArray(applications) ? applications : []); %>
+
+  <% if (list.length === 0) { %>
+    <div class="alert alert-info">まだ応募がありません。</div>
+  <% } else { %>
+    <div class="row g-3">
+      <% for (var i = 0; i < list.length; i++) { var app = list[i]; %>
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h5 class="card-title mb-1">
+                    <%= app.title %>
+                    <% if (app.company_name) { %>
+                      <span class="badge bg-secondary align-middle ms-2"><%= app.company_name %></span>
+                    <% } %>
+                  </h5>
+                  <div class="text-muted small mb-2">
+                    応募日: <%= app.applied_at || app.created_at || '-' %>
+                    <% if (app.status) { %> / ステータス: <%= app.status %> <% } %>
+                  </div>
+                </div>
+
+                <% 
+                  // 画像URLを頑健に生成：絶対URL/相対/ファイル名すべて対応
+                  const raw = (app.image_url || '').trim();
+                    let imgSrc = '';
+                    if (raw) {
+                      const isAbs = /^https?:\/\//i.test(raw);
+                      imgSrc = isAbs ? raw : ('/uploads/' + raw.replace(/^\/?uploads?\//i, ''));
+                  }                
+                %>
+                <% if (imgSrc) { %>
+                  <div class="ad-thumb-wrap">
+                  <img src="<%= imgSrc %>" alt="ad image" class="ad-thumb rounded"
+                        width="160" height="90" loading="lazy" decoding="async">                  </div>
+                <% } %>
+              </div>
+
+              <% if (app.description) { %>
+                <div class="mt-2 prose">
+                  <%- app.description %>
+                </div>
+              <% } %>
+
+              <div class="mt-3 d-flex gap-2">
+
+                <% if (app.can_cancel) { %>
+                  <form method="post" action="/applications/<%= app.id %>?_method=DELETE" class="d-inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">応募を取り消す</button>
+                  </form>
+                <% } %>
+              </div>
+
+              <% if (app.request_id && user && user.id) { %>
+                <!-- 紹介者付き購入URL（既存の /purchase/ad/:adId/by/:userId に直行） -->
+                <div class="mt-3">
+                  <label class="form-label mb-1">紹介者付き購入URL（このまま配布OK）</label>
+                  <div class="row g-2 align-items-center"
+                       data-ref-box
+                       data-path="/purchase/ad/<%= app.request_id %>/by/<%= user.id %>">
+                    <div class="col-md-12">
+                      <div class="input-group">
+                        <input class="form-control" data-url readonly>
+                        <button class="btn btn-outline-secondary" type="button" data-copy>コピー</button>
+                        <a class="btn btn-primary" data-open target="_blank" rel="noopener">開く</a>
+                      </div>
+                      <div class="form-text">
+                        クリックで購入ページへ遷移し、売上はユーザーID <code><%= user.id %></code> に計上されます。
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% } %>
+
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+</div>
+
+<style nonce="<%= (typeof cspNonce !== 'undefined' && cspNonce) ? cspNonce : '' %>">
+  /* 右上の空白に気持ちよくはめ込むサムネ（16:9） */
+  .ad-thumb-wrap { width: 160px; height: 90px; flex: 0 0 160px; }
+  .ad-thumb { width: 100%; height: 100%; object-fit: cover; object-position: center; background:#f8f9fa; }
+  @media (max-width: 576px) { .ad-thumb-wrap { width: 120px; height: 68px; } }
+</style>
+
+<script nonce="<%= (typeof cspNonce !== 'undefined' && cspNonce) ? cspNonce : '' %>">
+(function(){
+  function toAbs(path){
+    try { return new URL(path, window.location.origin).toString(); }
+    catch { return window.location.origin + path; }
+  }
+  function init(box){
+    const abs = toAbs(box.getAttribute('data-path')); // /purchase/ad/:adId/by/:userId
+    const out = box.querySelector('[data-url]');
+    const a   = box.querySelector('[data-open]');
+    if(out) out.value = abs;
+    if(a)   a.href = abs;
+  }
+  function copy(e){
+    const b = e.target.closest('[data-copy]'); if(!b) return;
+    const box = b.closest('[data-ref-box]'); const out = box && box.querySelector('[data-url]');
+    if(!out) return; out.focus(); out.select(); document.execCommand('copy');
+    b.textContent='コピーしました'; setTimeout(()=>{b.textContent='コピー';},1200);
+  }
+  document.querySelectorAll('[data-ref-box]').forEach(init);
+  document.addEventListener('click', copy);
+})();
+</script>
+
+<%- include('partials/footer') %>

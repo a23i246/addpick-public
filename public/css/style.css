@@ -1,0 +1,228 @@
+body {
+  font-family: sans-serif;
+  background-color: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 300px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+label {
+  display: block;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/*新規登録ボタン*/
+.register-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.register-button:hover {
+  background-color: #218838;
+}
+
+/*ログインページボタン*/
+.login-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #6c757d;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.login-button:hover {
+  background-color: #5a6268;
+}
+
+/*ロール選択で追加*/
+input[type="radio"] {
+  margin-right: 8px;
+}
+
+.role-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.role-button {
+  display: block;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.role-button:hover {
+  background-color: #e2e6ea;
+}
+
+.role-button input[type="radio"] {
+  display: none; /* ラジオボタン非表示 */
+}
+
+.role-button.selected {
+  border-color: #007bff;
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+/*購入者ホームで追加*/
+.home-link {
+  display: inline-block;
+  margin: 8px 0;
+  padding: 8px 16px;
+  background-color: #17a2b8;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.home-link:hover {
+  background-color: #138496;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.action-button {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  transition: 0.3s;
+  color: white;
+  background-color: #6c757d;
+}
+
+.action-button:hover {
+  opacity: 0.9;
+}
+
+.action-button.primary {
+  background-color: #007bff;
+}
+
+.action-button.primary:hover {
+  background-color: #0069d9;
+}
+
+/* ========== インラインスタイル移行用 ========== */
+
+/* 共通余白・配置 */
+.text-center-mt15 { text-align: center; margin-top: 15px; }
+.mb-10 { margin-bottom: 10px; }
+
+/* 幅・高さ制御 */
+.max-w-440 { max-width: 440px; }
+.max-w-300 { max-width: 300px; }
+.max-w-280 { max-width: 280px; }
+.max-w-320 { max-width: 320px; }
+.max-w-420 { max-width: 420px; }
+.max-h-200 { max-height: 200px; }
+.w-100 { width: 100px; }
+
+/* アバター画像 */
+.avatar-lg {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+.avatar-sm {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.avatar-header {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.1);
+}
+
+/* 表示制御 */
+.inline { display: inline; }
+
+.min-w-240 { min-width: 240px; }
+.min-w-240 { min-width: 240px; }
+.max-w-320 { max-width: 320px; }
+
+/* プロフィール編集画面用の小さいアイコン */
+.profile-edit-img {
+  width: 100px;   /* 編集画面では少し小さめ */
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}

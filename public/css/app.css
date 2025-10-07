@@ -1,0 +1,8 @@
+/* 正方形トリミングでアイコン化（64x64） */
+.avatar-icon {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;      /* 余白なく中央トリミング */
+  object-position: center;
+  background-color: #f8f9fa; /* 透明画像の下地 */
+}

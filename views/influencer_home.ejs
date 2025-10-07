@@ -1,0 +1,66 @@
+<%- include('partials/header') %>
+
+<h1 class="mb-4">📋 広告依頼一覧</h1>
+
+<form method="GET" action="/influencer/home" class="row g-2 mb-4">
+  <div class="col-md-4">
+    <input type="text" name="keyword" class="form-control" placeholder="キーワード検索" value="<%= keyword || '' %>">
+  </div>
+
+  <div class="col-md-3">
+    <select name="category" class="form-select">
+      <option value="">カテゴリで絞り込み</option>
+      <% categories.forEach(cat => { %>
+        <option value="<%= cat.id %>" <%= (String(selectedCategory) === String(cat.id)) ? 'selected' : '' %>>
+          <%= cat.name %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="col-md-3">
+    <select name="sort" class="form-select">
+      <option value="">並び順なし</option>
+      <option value="price_asc" <%= (sort === 'price_asc') ? 'selected' : '' %>>価格が安い順</option>
+      <option value="price_desc" <%= (sort === 'price_desc') ? 'selected' : '' %>>価格が高い順</option>
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-primary w-100">検索</button>
+  </div>
+</form>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  <% ads.forEach(req => { %>
+    <div class="card mb-4 p-3">
+      <h5><%= req.title %></h5>
+      <p>商品名: <%= req.product_name %></p>
+      <p>報酬: <%= req.reward %> 円</p>
+      <p>締切: <%= req.deadline %></p>
+      <p><strong>在庫数:</strong> <%= req.stock %> 個</p>
+
+      <% if (req.stock <= 0) { %>
+        <p class="text-danger">※ 売り切れ</p>
+      <% } else { %>
+        <% if (req.application_id) { %>
+          <button class="btn btn-secondary" disabled>応募済み</button>
+        <% } else { %>
+          <form action="/applications/<%= req.id %>" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit" class="btn btn-primary">応募する</button>
+          </form>
+        <% } %>
+      <% } %>
+    </div>
+  <% }); %>
+</div>
+
+<div class="text-center mt-5">
+  <a href="/" class="d-inline-flex align-items-center p-3 border rounded text-decoration-none">
+    <span class="me-2">🏠</span>
+    <span class="fw-bold">ホームに戻る</span>
+  </a>
+</div>
+
+<%- include('partials/footer') %>

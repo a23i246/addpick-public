@@ -1,0 +1,36 @@
+<%- include('partials/header', { pageTitle: '購入完了', user: user }) %>
+
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h3 class="mb-3 text-success">ご購入ありがとうございました！</h3>
+    <% if (mockPayment) { %>
+      <div class="alert alert-warning">
+        ※この購入は仮決済モードで行われました。決済は行われていません。
+      </div>
+    <% } %>
+
+    <% if (ad) { %>
+      <h4 class="text-primary"><%= ad.title %></h4>
+      <p class="mb-2"><strong>商品名:</strong> <%= ad.product_name %></p>
+      <p class="mb-2"><strong>紹介者:</strong> <%= ad.referrer_name || '（なし）' %></p>
+
+      <p class="mb-2">
+        <strong>価格:</strong> ¥<%= ad.unit_price %> × <%= quantity %> 個
+      </p>
+      <p class="mb-3">
+        <strong>合計金額:</strong> ¥<%= ad.unit_price * quantity %>
+      </p>
+      <% if (typeof purchased_at !== 'undefined' && purchased_at) { %>
+        <p class="text-muted">購入日時: <%= purchased_at %></p>
+      <% } %>
+    <% } else { %>
+      <div class="alert alert-info">
+        購入情報が取得できませんでした。時間をおいて再度アクセスしてください。
+      </div>
+    <% } %>
+
+    <a href="/" class="btn btn-outline-secondary">ホームに戻る</a>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

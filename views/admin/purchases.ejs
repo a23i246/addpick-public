@@ -1,0 +1,34 @@
+<%- include('../partials/header_admin', { title: '購入履歴一覧', user }) %>
+
+<div class="container mt-5">
+  <h1 class="mb-4">購入履歴一覧（管理者）</h1>
+
+  <% if (error) { %>
+    <div class="alert alert-danger"><%= error %></div>
+  <% } %>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>購入ID</th>
+        <th>広告タイトル</th>
+        <th>購入者</th>
+        <th>紹介者（インフルエンサー）</th>
+        <th>購入日時</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% purchases.forEach(p => { %>
+        <tr>
+          <td><%= p.id %></td>
+          <td><%= p.ad_title %></td>
+          <td><%= p.buyer_name %></td>
+          <td><%= p.influencer_name %></td>
+          <td><%= p.created_at %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

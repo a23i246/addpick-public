@@ -1,0 +1,45 @@
+<%- include('partials/header', { pageTitle: 'カート', user: user }) %>
+
+<div class="container mt-5">
+  <h2>カート内容</h2>
+
+  <% if (items.length === 0) { %>
+    <p>カートに商品はありません。</p>
+  <% } else { %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>商品名</th>
+          <th>価格</th>
+          <th>数量</th>
+          <th>小計</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% items.forEach(item => { %>
+          <tr>
+            <td><%= item.product_name %></td>
+            <td>¥<%= item.unit_price %></td>
+            <td><%= item.quantity %></td>
+            <td>¥<%= item.unit_price * item.quantity %></td>
+            <td>
+              <form action="/cart/delete/<%= item.cart_id %>" method="POST">
+                <%- include('partials/csrf') %>
+                <button class="btn btn-sm btn-danger">削除</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <h4>合計: ¥<%= total %></h4>
+    <form action="/cart/checkout" method="POST">
+      <%- include('partials/csrf') %>
+      <button class="btn btn-success">まとめて購入</button>
+    </form>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

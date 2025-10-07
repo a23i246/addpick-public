@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AddPick — README（Web開発企業向け・実績付き）</title>
+  <style>
+    :root {
+      --bg:#0f172a;        /* slate-900 */
+      --panel:#111827;     /* gray-900 */
+      --ink:#e5e7eb;       /* gray-200 */
+      --muted:#94a3b8;     /* slate-400 */
+      --accent:#60a5fa;    /* blue-400 */
+      --border:#1f2937;    /* gray-800 */
+      --chip:#0b1220;
+      --ok:#22c55e;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"; line-height:1.65; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    pre { background: var(--chip); border:1px solid var(--border); padding: 1rem; border-radius: 12px; overflow:auto; }
+    .container { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
+    header { margin-bottom: 20px; }
+    h1 { font-size: clamp(24px, 4vw, 34px); margin:0 0 8px; }
+    h2 { font-size: clamp(20px, 3vw, 26px); margin: 28px 0 10px; padding-top: 6px; border-top: 1px solid var(--border); }
+    h3 { font-size: clamp(18px, 2.5vw, 22px); margin: 20px 0 8px; }
+    .lead { color: var(--muted); font-size: 15px; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin: 14px 0; }
+    .kicker { display:inline-block; padding: 4px 10px; background: var(--chip); border:1px solid var(--border); color: var(--muted); border-radius: 999px; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
+    .list-grid { display: grid; gap: 8px; }
+    ul { padding-left: 1.2rem; }
+    .two-col { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    table { width:100%; border-collapse: collapse; border:1px solid var(--border); }
+    th, td { border:1px solid var(--border); padding:.55rem .7rem; text-align:left; }
+    th { background: #0b1220; color:#cbd5e1; }
+    .footer { margin-top: 40px; color: var(--muted); font-size: 14px; }
+    .chip { display:inline-block; padding:.2rem .55rem; background:var(--chip); border:1px solid var(--border); border-radius:999px; font-size:12px; color:#cbd5e1; }
+    .ok { color: var(--ok); }
+    .badge { display:inline-block; padding:.25rem .5rem; border:1px solid var(--border); border-radius:8px; background:var(--chip); font-size:12px; color:#cbd5e1; }
+    .mt-0{margin-top:0} .mt-1{margin-top:6px} .mt-2{margin-top:12px} .mt-3{margin-top:18px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="kicker">README</span>
+      <h1 class="mt-0">AddPick — 地域×インフルエンサーの成果型プロモーション基盤（Web開発企業向け）</h1>
+      <p class="lead">応募型マッチングと成果記録をワンストップで扱うWebアプリ。<br>
+      技術設計と将来性を短時間で把握できるよう構成しています。</p>
+      <div class="mt-1">
+        <span class="badge">Node.js/Express</span>
+        <span class="badge">EJS</span>
+        <span class="badge">SQLite</span>
+        <span class="badge">Bootstrap</span>
+        <span class="badge">multer</span>
+        <span class="badge">bcrypt</span>
+        <span class="badge">csurf</span>
+      </div>
+    </header>
+
+    <section class="panel">
+      <h2 id="toc">目次</h2>
+      <ol>
+        <li><a href="#company">企業様へ</a></li>
+        <li><a href="#value">狙いと価値</a></li>
+        <li><a href="#features">機能一覧</a></li>
+        <li><a href="#arch">アーキテクチャ</a></li>
+        <li><a href="#data">データモデル（抜粋）</a></li>
+        <li><a href="#security">セキュリティ方針</a></li>
+        <li><a href="#setup">セットアップ</a></li>
+        <li><a href="#env">環境変数</a></li>
+        <li><a href="#did">私が行ったこと（実装実績・工夫の一覧）</a></li>
+        <li><a href="#demo">スクリーンショット/デモ</a></li>
+        <li><a href="#roadmap">ロードマップ</a></li>
+        <li><a href="#policy">開発ポリシー</a></li>
+        <li><a href="#author">作者</a></li>
+      </ol>
+    </section>
+
+    <section id="company">
+      <h2>企業様へ</h2>
+      <div class="list-grid">
+
+        <div class="panel">
+          <h3 class="mt-0">閲覧企業様へ（要点）</h3>
+          <ul>
+            <li><strong>目的：</strong>広告 × インフルエンサーをスムーズに結ぶ基盤を、個人開発で現在進行形に構築。</li>
+            <li><strong>対象：</strong>高額で踏み出しづらい企業・地域密着店・ニッチ商材にフォーカス。</li>
+            <li><strong>提供価値：</strong>少額から始められ、<strong>一度に複数へ依頼</strong>しやすく、<strong>成果を簡易可視化</strong>。</li>
+            <li><strong>利用イメージ：</strong>依頼を受けたユーザーが購入ページURLをSNSで周知／動画で軽く紹介／Xで1ポストなど
+              <span class="chip">“気軽な広告”</span>の実装を目指す。</li>
+            <li><strong>インフルエンサー側の利点：</strong>自ら案件を選び、<strong>お小遣い稼ぎレベル</strong>でも参加可能。</li>
+            <li><strong>技術スタンス：</strong>生成AIは活用するが、<strong>自分の手で検証・再現できる理解</strong>を重視。</li>
+            <li><strong>現状の学び：</strong>要件曖昧で着手→都度見直し／セキュリティ並行実装→デバッグ複雑化→<strong>構成を再設計</strong>して改善中。</li>
+            <li><strong>今後強化：</strong><strong>要件定義・設計・テスト</strong>の体系化（機能/非機能→設計→単体/結合/E2E、CI）、
+              セキュリティ（Helmet/CSP、RBAC、監査ログ）。</li>
+            <li><strong>ご一緒したいこと：</strong>コードレビュー／技術ディスカッション／小規模PoCからの共創（インターン/アルバイト含む）。</li>
+          </ul>
+          <p class="lead">短時間での確認用にサマリ化しています。詳細は下記の本文をご参照ください。</p>
+        </div>
+
+        <div class="panel">
+          <h3 class="mt-0">ご挨拶と背景</h3>
+          <p>
+            ご覧いただきありがとうございます。<br>
+            「AddPick」は、広告とインフルエンサーのマッチングをスムーズに行えるサービスを目指し、<strong>自ら企画・設計・実装</strong>した
+            初のWebサービスです。インフルエンサー施策の<strong>高コスト・踏み出しづらさ</strong>を解消し、
+            <strong>少額かつ多数へ依頼</strong>できることを目的に制作を始めました。
+          </p>
+          <p>
+            とくに、地域密着型の飲食店や、コア層向けのニッチ企業など、広告がしにくい領域での活用を想定しています。
+            その地域の住民、旅行者のインフルエンサー、コアなユーザー（効果的に広めてくれる人）を中心に、
+            参加しやすい仕組みを目指しています。
+          </p>
+          <p>
+            インフルエンサー側は、これまでの「受け身の依頼」から一歩進み、
+            <strong>案件を自ら選び、気軽に取り組める</strong>ことを想定しています（例：購入ページURLをSNSに載せる、動画で軽く触れる、Xで一度ポスト など）。
+          </p>
+          <p>
+            技術面では生成AIも活用していますが、鵜呑みにせず、<strong>自分の手で検証・再現できる最低限の理解</strong>を重視しています。
+            セキュリティ対応を機能と並行で進めた結果、デバッグが複雑化したり、サーバー側が煩雑になった時期もありましたが、
+            途中で<strong>構成の見直し・リファクタ</strong>を行うなど、課題を糧に改善を進めています。
+          </p>
+          <p>
+            また、要件定義が曖昧なまま開発を始めた反省から、今後は
+            <strong>要件定義・設計・テストの体系的な学習と実践</strong>
+            （ユーザー要件→機能/非機能要件、アーキテクチャ/DB設計、単体・結合・E2E、CIによる自動化）
+            を強化し、<strong>チームでも通用する品質</strong>へと引き上げていきます。
+          </p>
+          <p>
+            本プロジェクトは未完成の部分もありますが、<strong>学びながら形にしていく姿勢</strong>を大切に、継続して成長してまいります。
+            「一緒に進めてみたい」「将来が楽しみだ」と感じていただけましたら、ぜひお声がけください。
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="value">
+      <h2>狙いと価値</h2>
+      <div class="list-grid">
+        <div class="panel">
+          <h3>課題</h3>
+          <ul>
+            <li>インフルエンサー依頼は <strong>高額・不透明</strong>、運用工数も大きい</li>
+            <li>地域/ニッチ商材ほど適切な露出が難しい</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>解法</h3>
+          <p>広告依頼 → 応募 → 広告投稿 → 購入/報酬の簡易可視化までを <strong>一気通貫</strong> で提供。小さく始め、<strong>定量的に学習</strong>できる仕組みを目指す。</p>
+        </div>
+        <div class="panel">
+          <h3>価値</h3>
+          <ul>
+            <li>着手コスト低減</li>
+            <li>オペレーション時短</li>
+            <li>実施ログ蓄積による学習サイクル</li>
+            <li>一度に多量の広告を出せる可能性</li>
+            <li>広告に効果的な人材が自動で見つかる</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <h2>機能一覧</h2>
+      <ul>
+        <li>募集管理：投稿・編集・締切・報酬条件</li>
+        <li>応募/採択：応募者一覧、採択/辞退、メッセージ（予定）</li>
+        <li>成果可視化（簡易）：購入/報酬履歴の表示</li>
+        <li>プロフィール/画像：企業/インフルエンサー、画像アップロード</li>
+        <li>権限：ユーザーロール（admin/company/influencer/buyer）に応じた画面切替</li>
+        <li>運用補助：ページネーション、基本的な並び替え・検索（順次強化）</li>
+      </ul>
+      <p class="lead">将来：クリック/コンバージョン計測、支払いフロー連携、通知、レポート出力 等</p>
+    </section>
+
+    <section id="arch">
+      <h2>アーキテクチャ</h2>
+      <div class="two-col">
+        <div class="panel">
+<pre><code>Browser
+  └─ EJS Templates (Bootstrap)
+       └─ Express Routes
+            └─ Controllers（入出力・バリデーション）
+                 └─ Services（ドメインロジック）
+                      └─ Models/DB（SQLite → 将来はRDBに移行）</code></pre>
+        </div>
+        <div class="panel">
+          <p><strong>技術スタック：</strong>Node.js(Express) / EJS / SQLite / Bootstrap / multer / bcrypt / csurf</p>
+          <p><strong>方針：</strong>モノリシックで素早く価値検証 → ルート/サービス/DAO分割で保守性とテスト性を段階的に向上。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="data">
+      <h2>データモデル（抜粋）</h2>
+      <ul>
+        <li><code>users(id, name, email, password_hash, role, profile_image, bio, created_at)</code></li>
+        <li><code>ad_requests(id, company_id, title, product_name, description, reward, deadline, image, created_at)</code></li>
+        <li><code>applications(id, ad_request_id, influencer_id, status, created_at)</code></li>
+        <li><code>purchases(id, ad_request_id, buyer_id, quantity, amount, created_at)</code></li>
+        <li><code>payment_methods(id, user_id, payment_method_name)</code></li>
+        <li><code>income(id, user_id, payment_method_id, income_amount, date)</code></li>
+        <li><code>follows(follower_id, followee_id, created_at)</code></li>
+      </ul>
+      <p class="lead">最小モデルで運用開始し、イベント/監査ログなどの追加に耐える拡張性を確保。</p>
+    </section>
+
+    <section id="security">
+      <h2>セキュリティ方針</h2>
+      <table>
+        <thead>
+          <tr><th>項目</th><th>現状</th><th>今後</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>認証情報</td><td>bcryptでハッシュ化</td><td>Argon2、KDFパラメータ管理</td></tr>
+          <tr><td>セッション</td><td>express-session（Secure属性推奨）</td><td>Redisストア、トークンローテーション</td></tr>
+          <tr><td>CSRF</td><td>csurf 導入</td><td>SPA化時はSameSite/Lax、二重送信防止</td></tr>
+          <tr><td>ヘッダ</td><td>Helmet一部/強化予定</td><td>厳格CSP、Referrer-Policy 等</td></tr>
+          <tr><td>入力検証</td><td>サーバ側バリデーション</td><td>Zod/Yupでスキーマ化</td></tr>
+          <tr><td>権限</td><td>ルートガード</td><td>RBAC/ABAC、監査ログ</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="setup">
+      <h2>セットアップ</h2>
+<pre><code class="language-bash">
+```bash
+git clone https://github.com/a23i246/addpick-public.git
+cd addpick-public
+
+# 環境変数
+cp .env.example .env
+# .env の DB を一本化
+# DB_PATH=./database.sqlite
+# DEMO_MODE=true
+# SESSION_SECRET=change_me
+# CSRF_SECRET=change_me
+
+npm ci
+
+# 404/500 テンプレが無いと一部ルートで落ちるため、views/ に置く
+# views/404.ejs, views/500.ejs を準備（簡易テンプレでOK）
+
+# 画像以外の全列を埋めるデモデータ投入
+npm run db:seed-full
+
+# 起動
+npm start
+# http://localhost:3000</code></pre>
+
+      <h3>開発スクリプト（例）</h3>
+<pre><code class="language-json">{
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "test": "jest"
+  }
+}</code></pre>
+
+      <h3>ディレクトリ構成（例）</h3>
+<pre><code>addpick/
+├─ index.js
+├─ routes/
+├─ controllers/
+├─ services/
+├─ models/
+├─ middlewares/
+├─ views/            # EJSテンプレート
+├─ public/           # 静的ファイル
+├─ uploads/          # 画像アップロード先
+├─ .env.example
+└─ package.json</code></pre>
+    </section>
+
+    <section id="env">
+      <h2>環境変数</h2>
+<pre><code># セッション・セキュリティ
+SESSION_SECRET=change_me
+NODE_ENV=development
+
+# アップロード
+UPLOAD_DIR=uploads
+
+# DB（SQLite）
+DATABASE_URL=sqlite:./db.sqlite3</code></pre>
+      <p class="lead">公開リポジトリでは秘密情報を含めないよう注意。</p>
+    </section>
+
+    <section id="did">
+      <h2>私が行ったこと（実装実績・工夫の一覧）</h2>
+      <div class="panel">
+        <h3>アプリ機能/UI</h3>
+        <ul>
+          <li>企業・インフルエンサーの <strong>ユーザー登録/ログイン</strong> 実装（EJSフォーム＋サーバ側検証）</li>
+          <li><strong>広告依頼の投稿/編集/削除</strong>、締切・報酬条件の管理、一覧ページのページネーション（10件/頁目安）</li>
+          <li><strong>応募/採択フロー</strong> の基本実装（応募一覧表示、採択・辞退の状態遷移）</li>
+          <li>企業/インフルエンサー別 <strong>ダッシュボード</strong> 骨格を作成（依頼一覧・応募管理・簡易実績）</li>
+          <li><strong>プロフィール画像アップロード</strong>（multer、拡張子/サイズバリデーション、デフォルト画像運用）</li>
+          <li>共通 <strong>ヘッダー/フッターのパーシャル化</strong> と <strong>ロール別ヘッダー切替</strong>（company/admin等）</li>
+          <li>企業向け <strong>購入済み一覧</strong> 画面と「対応済み」トグル導線の追加（運用フローを想定）</li>
+          <li>WIP：<strong>フォロー機能</strong> の設計とUI試作（CSRF対応のボタン化、一覧のカード表示最適化）</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>バックエンド/設計</h3>
+        <ul>
+          <li>モノリシック構成から <strong>routes / controllers / services</strong> への段階的分割方針を策定し、主要ルートから適用開始</li>
+          <li>ドメイン境界を意識した <strong>最小データモデル</strong> 設計（募集→応募→採択→購入/報酬）</li>
+          <li>将来のRDB移行を見据えた <strong>抽象化</strong>（ファイル分割、依存の明示、マイグレーション雛形）</li>
+          <li>リスト系クエリの <strong>JOIN最適化</strong>、基本インデックス付与、N+1の初期対策</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>セキュリティ/ミドルウェア</h3>
+        <ul>
+          <li><strong>bcrypt</strong> によるパスワードハッシュ化、<strong>express-session</strong> の導入とCookie属性の見直し</li>
+          <li>全フォームに <strong>CSRFトークン</strong> を埋め込み（EJS側の統一ヘルパ/hidden input化）、ミスマッチの原因調査と修正</li>
+          <li>独自ミドルウェア：<strong>ensureLoggedIn / ensureAdmin / safeJson</strong> を用意し、ルート保護と安全なJSONレスポンスを実装</li>
+          <li>将来計画：<strong>Helmet + CSP</strong>、RBAC、監査ログ、レートリミットの追加</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>運用/品質</h3>
+        <ul>
+          <li><strong>.env運用</strong> と機密の外出し、<strong>.gitignore</strong> の整備（uploads/ 等）</li>
+          <li>ブランチ運用（例：<code>buyer-purchase-history</code>）と <strong>安定コミットへのロールバック</strong> 実施（破損時の復旧手順を確立）</li>
+          <li>エラー監視の強化：EJSの <code>locals</code> 参照ミス（例：<code>sessionUser</code>, <code>csrfToken</code> 未定義）を潰し込み</li>
+          <li>UI/UXの一貫性：Bootstrapのコンポーネント統一、表示の軽量化、読み込み順の整理</li>
+        </ul>
+      </div>
+      <p class="lead">※ 上記は抜粋です。コードレビュー用に該当ファイル/コミットの提示が可能です。</p>
+    </section>
+
+    <section id="demo">
+      <h2>スクリーンショット/デモ</h2>
+      <ul>
+        <li>企業ダッシュボード（依頼一覧 / 応募管理 / 実績）</li>
+        <li>インフルエンサー画面（応募、履歴）</li>
+      </ul>
+      <p class="lead">※画像は省略。必要であれば別資料にて提供可能</p>
+    </section>
+
+    <section id="roadmap">
+      <h2>ロードマップ</h2>
+      <ol>
+        <li>ルーティング/サービス/DAOの責務分離完了、入力バリデーションのスキーマ化</li>
+        <li>Helmet + CSP、RBAC、監査ログの導入</li>
+        <li>OpenAPI定義 → Jest/Supertest でのHTTPテスト自動化</li>
+        <li>APM/ログ集約による可観測性強化、ボトルネック解消</li>
+        <li>成果計測（計測リンク/CVの簡易トラッキング）</li>
+        <li>CI/CDとIaCの導入（Lint/Test/Deployの自動化）</li>
+      </ol>
+    </section>
+
+    <section id="policy">
+      <h2>開発ポリシー</h2>
+      <ul>
+        <li><strong>Small but Solid</strong>：堅牢な最小構成から拡張</li>
+        <li><strong>テスト可能な境界</strong>を増やす設計（メンテ性/再現性）</li>
+        <li><strong>セキュリティは早期から</strong>（後付け高コストを回避）</li>
+        <li>AIは<strong>補助輪</strong>：設計・実装は自分の手で検証して残す</li>
+      </ul>
+    </section>
+
+    <section id="author">
+      <h2>作者</h2>
+      <p><strong>井上 航</strong>（A23I246 / 岡山理科大学 情報理工学部）<br>
+      Stack：Node.js / Express / SQLite / EJS / Bootstrap 他<br>
+      Contact：a23i246nf@ous.jp（公開用アドレス推奨）</p>
+      <p class="footer">Web開発企業の皆さま、<strong>コードレビュー/技術ディスカッション歓迎</strong>です。PoCや改善テーマからの共創を希望します。</p>
+    </section>
+
+    <section id="license">
+      <h2>ライセンス</h2>
+      <div class="panel">
+        <p>
+          このプロジェクトは<strong>個人利用および非営利目的</strong>での使用に限り許可されています。<br>
+          <strong>商用利用、再配布、販売は禁止</strong>されています。<br>
+          詳細は <a href="./LICENSE.txt">LICENSE.txt</a> をご覧ください。
+        </p>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

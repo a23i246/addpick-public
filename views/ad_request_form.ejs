@@ -1,0 +1,95 @@
+<%- include('partials/header_company', { pageTitle: '広告依頼投稿', user: user }) %>
+
+<div class="container">
+  <div class="card p-4 shadow-sm">
+    <h2 class="mb-4 text-center"><%= adRequest ? '広告依頼を編集' : '広告依頼を投稿' %></h2>
+
+    <form action="<%= adRequest.id ? '/ad_requests/' + adRequest.id + '/edit' : '/ad_requests' %>" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <div class="mb-3">
+        <label class="form-label">タイトル</label>
+        <input type="text" name="title" class="form-control" value="<%= adRequest ? adRequest.title : '' %>" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">商品名</label>
+        <input type="text" name="product_name" class="form-control" value="<%= adRequest ? adRequest.product_name : '' %>">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">企業名</label>
+        <input type="text" name="company_name" class="form-control" value="<%= adRequest ? adRequest.company_name : '' %>">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">広告画像をアップロード</label>
+        <input type="file" name="image_file" class="form-control" accept="image/*">  <!-- ✅ URLではなくファイル選択 -->
+      </div>
+
+      <% if (adRequest && adRequest.image_url) { %>
+        <div class="mb-3">
+          <label class="form-label">現在の画像</label><br>
+          <img src="/uploads/<%= adRequest.image_url %>" class="max-w-300">
+        </div>
+      <% } %>
+
+      <div class="mb-3">
+        <label class="form-label">単価（1件あたり）</label>
+        <input type="number" name="unit_price" id="unit_price" class="form-control" value="<%= adRequest ? adRequest.unit_price : '' %>" required>
+        <small class="form-text text-muted">※企業8割・インフルエンサー1割・運営1割に自動分配されます</small>
+      </div>
+
+      <div class="mb-3">
+        <label for="stock" class="form-label">在庫数</label>
+        <input type="number" class="form-control" name="stock" id="stock" min="0" value="9999">
+      </div>
+
+
+      <!-- 自動計算用 -->
+      <input type="hidden" name="reward" id="reward" value="<%= adRequest ? adRequest.unit_price : '' %>">
+
+      <div class="mb-3">
+        <label class="form-label">募集締め切り</label>
+        <input type="date" name="deadline" id="deadline" class="form-control" value="<%= adRequest ? adRequest.deadline : '' %>">
+      </div>
+
+      <input type="hidden" id="today" value="<%= new Date().toISOString().split('T')[0] %>">
+
+      <div class="mb-3">
+        <label class="form-label">依頼料（目安）</label>
+        <p class="fs-5 fw-bold">¥<span id="request_fee_display">5000</span></p>
+      </div>
+
+      <% if (adRequest && adRequest.request_fee) { %>
+        <div class="mb-3">
+          <label class="form-label">現在の依頼料（保存値）</label>
+          <p>¥<%= adRequest.request_fee %></p>
+        </div>
+      <% } %>
+
+      <div class="mb-3">
+        <label class="form-label">詳細説明</label>
+        <textarea name="description" class="form-control" rows="4"><%= adRequest ? adRequest.description : '' %></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="category_id" class="form-label">カテゴリ</label>
+        <select name="category_id" class="form-select" required>
+          <option value="">選択してください</option>
+          <% categories.forEach(cat => { %>
+            <option value="<%= cat.id %>" <%= adRequest.category_id == cat.id ? 'selected' : '' %>><%= cat.name %></option>
+          <% }) %>
+        </select>
+      </div>
+
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary px-5">送信</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+<script src="/js/ad_request_form.js"></script>

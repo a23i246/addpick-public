@@ -1,0 +1,75 @@
+<%- include('../partials/header_admin', { title: '管理者ダッシュボード', user }) %>
+
+<div class="container mt-5">
+  <h1 class="mb-4">管理者ダッシュボード</h1>
+
+  <% if (error) { %>
+    <div class="alert alert-danger"><%= error %></div>
+  <% } %>
+
+  <div class="row text-center mb-4">
+    <div class="col-md-3">
+      <div class="card p-3 shadow-sm">
+        <h5>📢 広告数</h5>
+        <p class="fs-4"><%= stats.adCount %></p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 shadow-sm">
+        <h5>📝 応募数</h5>
+        <p class="fs-4"><%= stats.applicationCount %></p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 shadow-sm">
+        <h5>💰 購入数</h5>
+        <p class="fs-4"><%= stats.purchaseCount %></p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 shadow-sm">
+        <h5>💸 全体流通額</h5>
+        <p class="fs-4">¥<%= stats.totalFlow.toLocaleString() %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row text-center mb-4">
+    <div class="col-md-4">
+      <div class="card p-3 shadow-sm">
+        <h5>🤝 インフルエンサー報酬合計</h5>
+        <p class="fs-4">¥<%= stats.totalInfluencer.toLocaleString() %></p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-3 shadow-sm">
+        <h5>🏢 企業売上合計</h5>
+        <p class="fs-4">¥<%= stats.totalCompany.toLocaleString() %></p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-3 shadow-sm">
+        <h5>🧾 運営収益</h5>
+        <p class="fs-4">¥<%= stats.totalPlatform.toLocaleString() %></p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm p-3">
+        <h5>掲載料収入</h5>
+        <p class="fs-4">¥<%= stats.totalRequestFee %></p>
+      </div>
+    </div>
+</div>
+
+  </div>
+
+  <div class="list-group">
+    <a href="/admin/ad_requests" class="list-group-item list-group-item-action">📢 広告依頼一覧</a>
+    <a href="/admin/users" class="list-group-item list-group-item-action">👥 ユーザー一覧</a>
+    <a href="/admin/applications" class="list-group-item list-group-item-action">📝 応募履歴</a>
+    <a href="/admin/purchases" class="list-group-item list-group-item-action">💰 購入履歴</a>
+    <a href="/admin/logout" class="list-group-item list-group-item-action text-danger">🚪 ログアウト</a>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

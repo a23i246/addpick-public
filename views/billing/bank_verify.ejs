@@ -1,0 +1,29 @@
+<% if (user && user.role === 'company') { %>
+  <%- include('../partials/header_company', { pageTitle: pageTitle, user, csrfToken, bankVerified, withdrawableJPYFmt }) %>
+<% } else { %>
+  <%- include('../partials/header', { pageTitle: pageTitle, user, csrfToken, bankVerified, withdrawableJPYFmt }) %>
+<% } %>
+
+<div class="py-4">
+  <h1 class="h5 mb-3">口座の仮認証（モック）</h1>
+
+  <% if (typeof mockCode !== 'undefined' && mockCode) { %>
+    <div class="alert alert-info">［開発用ヒント］入力する金額は <strong><%= mockCode %> 円</strong> です。</div>
+  <% } %>
+
+  <% if (alreadyVerified) { %>
+    <div class="alert alert-success">仮認証は完了しています。</div>
+  <% } else { %>
+    <p class="text-muted">※ 1〜99円の入金があった想定で、その金額を入力します（モック）。</p>
+    <form method="POST">
+      <% if (csrfToken) { %><input type="hidden" name="_csrf" value="<%= csrfToken %>"><% } %>
+      <div class="row g-3 max-w-420">
+        <input class="form-control" name="amount" type="number" min="1" max="99" required>
+        <span class="input-group-text">円</span>
+        <button class="btn btn-primary" type="submit">確認</button>
+      </div>
+    </form>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

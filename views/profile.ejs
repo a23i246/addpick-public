@@ -1,0 +1,37 @@
+<%- include('partials/header', { title: 'プロフィール' }) %>
+
+<%
+  // 画像の存在チェック（空文字やnullに強く）
+  const profileImage = (user && user.profile_image && String(user.profile_image).trim() !== '')
+    ? '/uploads/' + user.profile_image
+    : '/uploads/default-avatar.png';
+
+  // countsが来ない場合でも0で表示できるように保険
+  const followers = (counts && counts.followers) || 0;
+  const following = (counts && counts.following) || 0;
+%>
+
+<div class="d-flex align-items-center gap-3 mb-3">
+  <img
+    src="<%= profileImage %>"
+    alt="プロフィール画像"
+    class="avatar-icon rounded-circle border"
+    width="64" height="64" loading="lazy">
+  <div>
+    <h1 class="h4 mb-1"><%= user.name %> さんのプロフィール</h1>
+    <div class="text-muted small">
+      フォロー <span class="fw-bold"><%= following %></span>
+      ・
+      フォロワー <span class="fw-bold"><%= followers %></span>
+    </div>
+  </div>
+</div>
+
+<p class="mb-1"><strong>メール：</strong> <%= user.email %></p>
+
+<p class="mb-1"><strong>自己紹介：</strong></p>
+<p class="mb-3"><%= user.bio || '未記入' %></p>
+
+<a href="/profile/edit" class="btn btn-primary">プロフィールを編集する</a>
+
+<%- include('partials/footer') %>

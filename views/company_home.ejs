@@ -1,0 +1,37 @@
+<%- include('partials/header_company', { pageTitle: '企業ホーム', user: user }) %>
+
+<h2 class="mb-4 text-center">自社の広告依頼一覧</h2>
+
+<% if (ads.length === 0) { %>
+  <p class="text-center">まだ広告依頼が投稿されていません。</p>
+<% } else { %>
+  <% ads.forEach(ad => { %>
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <% if (ad.image_url) { %>
+          <img src="/uploads/<%= ad.image_url %>" class="img-fluid mb-3 max-h-200">
+        <% } %>
+        <h5 class="card-title"><%= ad.title %></h5>
+        <p><strong>商品名：</strong> <%= ad.product_name %></p>
+        <p><strong>募集締切：</strong> <%= ad.deadline %></p>
+        <p><strong>依頼料：</strong> ¥<%= ad.request_fee %></p>
+        <p><strong>在庫数：</strong> <%= ad.stock %> 個</p>
+
+        <% if (ad.stock <= 0) { %>
+          <p class="text-danger">※ 売り切れ</p>
+        <% } %>
+
+        <div class="mt-3">
+          <a href="/ad_requests/<%= ad.id %>/edit" class="btn btn-outline-primary btn-sm">編集</a>
+          <form action="/ad_requests/<%= ad.id %>/delete" method="POST" class="inline">
+            <%- include('partials/csrf') %>
+            <button type="submit" class="btn btn-outline-danger btn-sm">削除</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+<% } %>
+
+<%- include('partials/footer') %>
+

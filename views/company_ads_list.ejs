@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>広告依頼一覧（企業）</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background-color: #f7f7f7;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background-color: white;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eee;
+    }
+
+    a.button {
+      padding: 6px 12px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+
+    form button {
+      padding: 6px 12px;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    form {
+      display: inline;
+    }
+
+    .home-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 8px 16px;
+      background-color: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1><%= user.name %> さんの広告依頼一覧</h1>
+
+  <table>
+    <tr>
+      <th>タイトル</th>
+      <th>商品名</th>
+      <th>応募数</th>
+      <th>購入数</th>
+      <th>締切日</th>
+      <th>操作</th>
+    </tr>
+    <% ads.forEach(ad => { %>
+      <tr>
+        <td><%= ad.title %></td>
+        <td><%= ad.product_name %></td>
+        <td><%= ad.application_count %></td>
+        <td><%= ad.purchase_count %></td>
+        <td><%= ad.deadline %></td>
+        <td>
+          <a href="/ad_requests/<%= ad.id %>/edit" class="button">編集</a>
+          <form action="/ad_requests/<%= ad.id %>/delete" method="POST">
+            <%- include('partials/csrf') %>
+
+            <button type="submit" onclick="return confirm('削除しますか？')">削除</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+
+  <a href="/" class="home-link">ホームに戻る</a>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<% if (user && user.role === 'company') { %>
+  <%- include('../partials/header_company', { pageTitle: pageTitle, user, csrfToken, bankVerified, withdrawableJPYFmt }) %>
+<% } else { %>
+  <%- include('../partials/header', { pageTitle: pageTitle, user, csrfToken, bankVerified, withdrawableJPYFmt }) %>
+<% } %>
+  <h1 class="h5 mb-3">引き落としを作成</h1>
+
+  <% if (!canDebit) { %>
+    <div class="alert alert-warning">口座の仮認証が未完了です。まずは設定から。</div>
+    <a class="btn btn-outline-primary" href="/billing/bank">口座設定へ</a>
+  <% } else { %>
+    <form method="POST" action="/debits">
+      <% if (typeof csrfToken !== 'undefined' && csrfToken) { %>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <% } %>
+      <input type="hidden" name="idempotency_key" value="<%= idemKey %>">
+
+      <div class="row g-3" style="max-width: 420px;">
+        <div class="col-12">
+          <label class="form-label">金額（円）</label>
+          <input class="form-control" name="amount_jpy" type="number" min="1" step="1" required>
+        </div>
+        <div class="col-12">
+          <label class="form-label">引き落とし予定日（任意）</label>
+          <input class="form-control" name="scheduled_at" type="date">
+        </div>
+      </div>
+
+      <div class="mt-3 d-flex gap-2">
+        <button class="btn btn-primary" type="submit">リクエスト作成</button>
+        <a class="btn btn-outline-secondary" href="/debits">履歴を見る</a>
+      </div>
+    </form>
+  <% } %>
+</div>
+<%- include('../partials/footer') %>

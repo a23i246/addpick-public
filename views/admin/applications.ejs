@@ -1,0 +1,32 @@
+<%- include('../partials/header_admin', { title: '応募履歴一覧', user }) %>
+
+<div class="container mt-5">
+  <h1 class="mb-4">応募履歴一覧（管理者）</h1>
+
+  <% if (error) { %>
+    <div class="alert alert-danger"><%= error %></div>
+  <% } %>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>応募ID</th>
+        <th>広告タイトル</th>
+        <th>応募者名</th>
+        <th>応募日</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% applications.forEach(app => { %>
+        <tr>
+          <td><%= app.id %></td>
+          <td><%= app.ad_title %></td>
+          <td><%= app.applicant_name %></td>
+          <td><%= app.created_at %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

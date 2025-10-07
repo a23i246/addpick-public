@@ -1,0 +1,37 @@
+﻿{
+  "name": "addpick-public",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "description": "AddPick public mirror",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    
+    "db:migrate": "node -r dotenv/config scripts/init-db.js --migrate",
+    "db:seed":    "node -r dotenv/config scripts/init-db.js --seed",
+    "db:reset":   "node -r dotenv/config scripts/init-db.js --reset",
+    "db:seed-full": "node scripts/seed-full.js",
+
+    "test": "echo \"No tests\""
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-sqlite3": "^0.9.16",
+    "cookie-parser": "^1.4.7",
+    "csurf": "^1.11.0",
+    "dotenv": "^17.2.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "multer": "^2.0.1",
+    "nodemailer": "^7.0.5",
+    "sanitize-html": "^2.17.0",
+    "sqlite3": "^5.1.7",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": { "nodemon": "^3.1.0" }
+}

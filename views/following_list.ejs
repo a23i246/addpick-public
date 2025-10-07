@@ -1,0 +1,46 @@
+<!--- フォロー済み一覧ページ -->
+<%- include('partials/header', { title: 'フォロー中ユーザー' }) %>
+
+<h2 class="mb-3">フォロー中のユーザー</h2>
+
+<style>
+  .x-list { border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+  .x-item { display: flex; align-items: center; gap: 12px; padding: 8px 12px; }
+  .x-item + .x-item { border-top: 1px solid #f0f0f0; }
+  .x-ava  { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; }
+  .x-name { min-width: 0; }
+  .x-name > span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .x-act  { margin-left: auto; }
+  @media (min-width: 992px) {
+    .x-item { padding: 10px 14px; }
+    .x-ava  { width: 44px; height: 44px; }
+  }
+</style>
+
+<% if (followingUsers.length === 0) { %>
+  <div class="alert alert-secondary">フォロー中のユーザーはいません。</div>
+<% } else { %>
+  <div class="x-list">
+    <% followingUsers.forEach(user => { %>
+      <div class="x-item">
+        <img class="x-ava"
+             src="<%= user.profile_image ? ('/uploads/' + user.profile_image) : '/uploads/default-avatar.png' %>"
+             alt="avatar">
+        <div class="x-name">
+          <span><%= user.name %></span>
+        </div>
+        <div class="x-act">
+          <!-- 既存のボタン仕様を維持 -->
+          <form method="POST" action="/unfollow/<%= user.id %>" class="m-0 d-inline">
+            <% if (typeof csrfToken !== 'undefined') { %>
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <% } %>
+            <button type="submit" class="btn btn-sm btn-danger">フォロー解除</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

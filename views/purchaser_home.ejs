@@ -1,0 +1,25 @@
+<!-- views/purchaser_home.ejs -->
+<%- include('partials/header', { title: '購入者ホーム', user }) %>
+
+<div class="container">
+  <h1 class="text-center"><%= user.name %> さん、ようこそ！</h1>
+
+  <p class="text-center">紹介リンクから広告を見て商品を購入できます。</p>
+
+  <ul class="list-unstyled mt-4 col-md-6 mx-auto">
+    <li class="mb-3">
+      <a href="/ad_requests/list" class="d-flex align-items-center p-3 border rounded text-decoration-none">
+        <span class="me-3">📢</span>
+        <span class="fw-bold">広告一覧を見る</span>
+      </a>
+    </li>
+    <li>
+      <a href="/my_purchases" class="d-flex align-items-center p-3 border rounded text-decoration-none">
+        <span class="me-3">🧾</span>
+        <span class="fw-bold">購入履歴を見る</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<%- include('partials/footer') %>

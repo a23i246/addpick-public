@@ -1,0 +1,37 @@
+<%- include('partials/header', { title: 'フォロワー一覧' }) %>
+
+<h2 class="mb-3">あなたをフォローしているユーザー</h2>
+
+<style>
+  .x-list { border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+  .x-item { display: flex; align-items: center; gap: 12px; padding: 8px 12px; }
+  .x-item + .x-item { border-top: 1px solid #f0f0f0; }
+  .x-ava  { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; }
+  .x-name { min-width: 0; }
+  .x-name > span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .x-act  { margin-left: auto; }
+  @media (min-width: 992px) {
+    .x-item { padding: 10px 14px; }
+    .x-ava  { width: 44px; height: 44px; }
+  }
+</style>
+
+<% if (followers.length === 0) { %>
+  <div class="alert alert-secondary">フォロワーはいません。</div>
+<% } else { %>
+  <div class="x-list">
+    <% followers.forEach(user => { %>
+      <div class="x-item">
+        <img class="x-ava"
+             src="<%= user.profile_image ? ('/uploads/' + user.profile_image) : '/uploads/default-avatar.png' %>"
+             alt="avatar">
+        <div class="x-name">
+          <span><%= user.name %></span>
+        </div>
+        <!-- 「ボタンはそのまま」で依頼：この一覧には元からボタン無しなので何も追加しません -->
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

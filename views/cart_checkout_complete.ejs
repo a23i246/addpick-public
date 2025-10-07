@@ -1,0 +1,19 @@
+<%- include('partials/header', { pageTitle: 'まとめて購入完了', user }) %>
+
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h3 class="mb-3 text-success">まとめて購入が完了しました！</h3>
+
+    <% if (mockPayment) { %>
+      <div class="alert alert-warning">
+        ※この購入は仮決済モードで行われました。決済は行われていません。
+      </div>
+    <% } %>
+
+    <p>ご購入いただいた商品は、マイページの「<a href="/my_purchases">購入履歴</a>」から確認できます。</p>
+
+    <a href="/" class="btn btn-primary mt-3">ホームに戻る</a>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

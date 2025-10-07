@@ -1,0 +1,27 @@
+<% if (user && user.role === 'company') { %>
+  <%- include('../partials/header_company', { pageTitle: pageTitle, user, csrfToken, bankVerified, withdrawableJPYFmt }) %>
+<% } else { %>
+  <%- include('../partials/header', { pageTitle: pageTitle, user, csrfToken, bankVerified, withdrawableJPYFmt }) %>
+<% } %>
+  <h1 class="h5 mb-3">引き落とし履歴</h1>
+  <div class="table-responsive">
+    <table class="table table-sm align-middle">
+      <thead><tr><th>ID</th><th>金額</th><th>状態</th><th>予定日</th><th>作成</th><th>処理</th><th>理由</th></tr></thead>
+      <tbody>
+      <% rows.forEach(r => { %>
+        <tr>
+          <td><%= r.id %></td>
+          <td><%= r.amount_jpy %> 円</td>
+          <td><span class="badge bg-<%= r.status==='succeeded'?'success':(r.status==='failed'?'danger':'secondary') %>"><%= r.status %></span></td>
+          <td><%= r.scheduled_at || '-' %></td>
+          <td><%= r.requested_at %></td>
+          <td><%= r.processed_at || '-' %></td>
+          <td><%= r.failure_reason || '-' %></td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <a class="btn btn-outline-primary" href="/debits/new">新規作成</a>
+</div>
+<%- include('../partials/footer') %>

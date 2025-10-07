@@ -1,0 +1,93 @@
+<%- include('partials/header', { title: 'ダッシュボード', user }) %>
+
+<div class="container py-4">
+  <h1 class="mb-4">ダッシュボード</h1>
+
+  <!-- 例：集計カード -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">総売上</h5>
+            <span class="text-muted small">（今月）</span>
+          </div>
+          <p class="display-6 mt-2 mb-0"><%= totals?.sales ?? 0 %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">購入件数</h5>
+            <span class="text-muted small">（今月）</span>
+          </div>
+          <p class="display-6 mt-2 mb-0"><%= totals?.orders ?? 0 %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">インフルエンサー取り分</h5>
+            <span class="text-muted small">（今月）</span>
+          </div>
+          <p class="display-6 mt-2 mb-0"><%= totals?.influencer_share ?? 0 %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 折れ線グラフ -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">売上推移</h5>
+      <canvas id="salesChart" height="100"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js（CDN。CSPで cdn.jsdelivr.net を許可済み想定） -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<!-- グラフ描画スクリプト：必ず nonce を付け、JSONは safeJSON で埋め込む -->
+<script nonce="<%= cspNonce %>">
+  document.addEventListener('DOMContentLoaded', () => {
+    // サーバから渡されたデータを安全に埋め込む
+    const labels = <%- safeJSON(chartData?.labels || []) %>;
+    const data   = <%- safeJSON(chartData?.data   || []) %>;
+
+    const ctx = document.getElementById('salesChart');
+    if (!ctx) return;
+
+    // Chart.js 初期化（色は指定しなくてもOK。デフォルト配色利用）
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: '売上',
+          data,
+          tension: 0.3,
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { title: { display: true, text: '期間' } },
+          y: { title: { display: true, text: '金額' }, beginAtZero: true }
+        },
+        plugins: {
+          legend: { display: true },
+          tooltip: { enabled: true }
+        }
+      }
+    });
+  });
+</script>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,6 @@
+﻿<!doctype html><meta charset="utf-8"><title>案件詳細</title>
+<%- include("_nav") %>
+<h1><%= ad.title %></h1>
+<p>商品: <%= ad.product_name %>（<%= ad.company_name %>）</p>
+<p>単価: <%= ad.unit_price %> 円 / 締切: <%= ad.deadline %></p>
+<p><pre><%= ad.description %></pre></p>

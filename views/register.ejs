@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ユーザー登録</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/register.css">
+</head>
+<body>
+<div class="container" style="max-width: 500px; margin: 50px auto;">
+  <h1 class="mb-4">ユーザー登録</h1>
+
+  <!-- メッセージ表示領域 -->
+  <div id="message" class="message-box" style="margin-bottom: 20px;"></div>
+
+  <!-- 仮登録フォーム -->
+  <form id="registerForm">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    
+    <div class="mb-3">
+      <label for="emailInput">メールアドレス</label>
+      <input type="email" id="emailInput" name="email" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">確認メールを送信</button>
+  </form>
+
+  <!-- ログインリンク -->
+  <div style="text-align: center; margin-top: 15px;">
+    <a href="/login" class="btn btn-link">ログインはこちら</a>
+  </div>
+</div>
+
+<script src="/js/register.js" defer></script>
+</body>
+</html>

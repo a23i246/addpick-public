@@ -1,0 +1,35 @@
+<%- include('../partials/header_admin', { title: '広告依頼一覧', user }) %>
+
+<div class="container mt-5">
+  <h1 class="mb-4">広告依頼一覧（管理者）</h1>
+
+  <% if (error) { %>
+    <div class="alert alert-danger"><%= error %></div>
+  <% } %>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>タイトル</th>
+        <th>企業名</th>
+        <th>報酬</th>
+        <th>締切</th>
+        <th>投稿日</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% adRequests.forEach(req => { %>
+        <tr>
+          <td><%= req.id %></td>
+          <td><%= req.title %></td>
+          <td><%= req.company_name %></td>
+          <td><%= req.reward %> 円</td>
+          <td><%= req.deadline %></td>
+          <td><%= req.created_at %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include('../partials/footer') %>

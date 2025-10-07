@@ -1,0 +1,22 @@
+<%- include('partials/header', { pageTitle: 'ロール選択' }) %>
+
+<div class="container py-4">
+  <h1 class="h5 mb-3">ロールを選択</h1>
+
+  <form method="POST" action="/select_role" class="card p-3 max-w-440">
+    <%- include('partials/csrf') %>  <!-- ★これが無いと invalid csrf token になります -->
+
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="role" id="r1" value="influencer" required>
+      <label class="form-check-label" for="r1">インフルエンサー</label>
+    </div>
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="radio" name="role" id="r2" value="company">
+      <label class="form-check-label" for="r2">企業</label>
+    </div>
+
+    <button class="btn btn-primary" type="submit">決定</button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>

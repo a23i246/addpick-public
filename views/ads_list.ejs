@@ -1,0 +1,10 @@
+﻿<!doctype html><meta charset="utf-8"><title>案件一覧</title>
+<%- include("_nav") %>
+<h1>案件一覧</h1>
+<ul>
+  <% if (!ads || ads.length === 0) { %><li>（まだありません）</li><% } %>
+  <% (ads||[]).forEach(a => { %>
+    <li><a href="/ads/<%= a.id %>">[#<%= a.id %>] <strong><%= a.title %></strong></a>
+      - <%= a.product_name %> / <%= a.unit_price %>円</li>
+  <% }) %>
+</ul>

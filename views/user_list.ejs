@@ -1,0 +1,52 @@
+<%- include('partials/header', { title: 'ユーザー一覧', user }) %>
+
+<h2 class="mb-3">インフルエンサーを探す</h2>
+
+<form method="GET" action="/users" class="mb-3 d-flex gap-2">
+  <input type="text" name="search" value="<%= search %>" placeholder="名前で検索" class="form-control">
+  <button type="submit" class="btn btn-primary">検索</button>
+</form>
+
+<style>
+  .x-list { border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+  .x-item { display: flex; align-items: center; gap: 12px; padding: 8px 12px; }
+  .x-item + .x-item { border-top: 1px solid #f0f0f0; }
+  .x-ava  { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; }
+  .x-name { min-width: 0; /* for text-ellipsis */ }
+  .x-name > span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .x-act  { margin-left: auto; }
+  @media (min-width: 992px) {
+    .x-item { padding: 10px 14px; }
+    .x-ava  { width: 44px; height: 44px; }
+  }
+</style>
+
+<div class="x-list">
+  <% users.forEach(u => { %>
+    <div class="x-item">
+      <img class="x-ava"
+           src="<%= u.profile_image ? ('/uploads/' + u.profile_image) : '/uploads/default-avatar.png' %>"
+           alt="avatar">
+      <div class="x-name">
+        <span><%= u.name %></span>
+      </div>
+      <div class="x-act">
+        <% if (!u.is_following) { %>
+          <form method="POST" action="/follow/<%= u.id %>" class="m-0">
+            <!-- CSRF -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit" class="btn btn-sm btn-outline-primary">フォロー</button>
+          </form>
+        <% } else { %>
+          <form method="POST" action="/unfollow/<%= u.id %>" class="m-0">
+            <!-- CSRF -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit" class="btn btn-sm btn-outline-secondary">解除</button>
+          </form>
+        <% } %>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,28 @@
+<%- include('partials/header_company', { pageTitle: '企業統計情報', user: user }) %>
+
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm">
+    <h2 class="mb-4 text-center">統計情報</h2>
+
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between">
+        <span>広告数</span>
+        <strong><%= stats.total_ads %></strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span>依頼を受けた人数</span>
+        <strong><%= stats.total_applicants %></strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span>購入数</span>
+        <strong><%= stats.total_purchases %></strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span>売上（企業取り分 80%）</span>
+        <strong>¥<%= stats.total_sales %></strong>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

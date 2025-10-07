@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ログイン</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>ログイン</h1>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="error-message"><%= error %></div>
+    <% } %>
+    <% if (typeof message !== 'undefined' && message) { %>
+      <div class="success-message"><%= message %></div>
+    <% } %>
+
+    <form action="/login" method="POST">
+      <%- include('partials/csrf') %>
+      <% if (typeof nextUrl !== 'undefined' && nextUrl) { %>
+        <input type="hidden" name="next" value="<%= nextUrl %>">
+      <% } %>
+
+      <label>
+        メールアドレス:
+        <input type="email" name="email" required>
+      </label>
+      <label>
+        パスワード:
+        <input type="password" name="password" required>
+      </label>
+      <button type="submit">ログイン</button>
+    </form>
+    <!-- ✅ 新規登録ボタン -->
+    <div class="text-center-mt15">
+      <a href="/register" class="register-button">新規登録はこちら</a>
+    </div>
+    <!-- パスワードリセット処理 -->
+    <div class="text-center-mt15">
+      <a href="/forgot-password" class="forgot-link">パスワードを忘れた方はこちら</a>
+    </div>
+  </div>
+</body>
+</html>

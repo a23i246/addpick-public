@@ -1,0 +1,30 @@
+<%- include('partials/header', { title: 'プロフィール編集' }) %>
+
+<h1>プロフィールを編集</h1>
+<form action="/profile/edit" method="POST" enctype="multipart/form-data">
+  <%- include('partials/csrf') %>
+  <div>
+    <label>名前：</label>
+    <input type="text" name="name" value="<%= user.name %>" required>
+  </div>
+  <div>
+    <label>自己紹介：</label>
+    <textarea name="bio" rows="4" cols="40"><%= user.bio || '' %></textarea>
+  </div>
+    <div class="mt-3">
+    <label>プロフィール画像：</label><br>
+    <%
+    const profileImage = user.profile_image && user.profile_image.trim() !== ''
+        ? '/uploads/' + user.profile_image
+        : '/uploads/default-avatar.png';
+    %>
+    <div class="profile-edit">
+      <img id="avatarPreview" src="<%= profileImage %>" class="avatar-icon rounded-circle border" width="64" height="64" loading="lazy" alt="アイコンプレビュー">
+    </div>
+    
+    <input id="fileInput" type="file" name="profile_image" accept="image/*">
+    </div>
+        <button type="submit">保存</button>
+</form>
+
+<%- include('partials/footer') %>
